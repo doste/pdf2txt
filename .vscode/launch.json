@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:pdf2txt}",
+            "name": "Debug pdf2txt",
+            "program": "${workspaceFolder:pdf2txt}/.build/debug/pdf2txt",
+            "preLaunchTask": "swift: Build Debug pdf2txt"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:pdf2txt}",
+            "name": "Release pdf2txt",
+            "program": "${workspaceFolder:pdf2txt}/.build/release/pdf2txt",
+            "preLaunchTask": "swift: Build Release pdf2txt"
+        }
+    ]
+}
