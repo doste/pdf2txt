@@ -40,7 +40,8 @@ func routes(_ app: Application) throws {
         let path = app.directory.publicDirectory + fileName
         //let isFileValid = ["txt"].contains(input.file.extension?.lowercased())
         //let isPdf = ["pdf"].contains(input.file.extension?.lowercased())
-        let isFileValid = input.file.extension?.lowercased() == "txt"
+        //let isFileValid = input.file.extension?.lowercased() == "txt"
+        let isFileValid = ["txt", "pdf"].contains(input.file.extension?.lowercased())
 
         if isFileValid {
             return req.application.fileio.openFile(path: path,
@@ -56,7 +57,6 @@ func routes(_ app: Application) throws {
                             try handle.close()
                         }
                         .flatMap {
-                            
                             req.view.render("file_upload_result", UploadContext(fileName: fileName, isValid: isFileValid, fileContents: getFileContents(path: path)))
                         }
                 }
