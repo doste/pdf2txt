@@ -16,3 +16,11 @@ The OCR logic is implemented using Apple's Vision framework [https://developer.a
     - [Converting PDF to Images in Swift: A Step-by-Step Guide](https://medium.com/@swift3.0devlopment/converting-pdf-to-images-in-swift-a-step-by-step-guide-3d7129a14165)
 
     - [File upload using Vapor 4](https://theswiftdev.com/file-upload-using-vapor-4/)
+
+
+### TODO:
+    - Validate the input file. Now we are saving to our Public folder whatever the user gives us. The only validation in place
+    is to check wheter is a PDF file or not. We should have a stronger validation.
+    - Remove files from the Public folder after they are used.
+    - Improve the OCR for PDF files containing images.
+    - Avoid using deprecated methods from the Vapor framework. For example, fileio.openFile(...)
