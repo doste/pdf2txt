@@ -13,9 +13,10 @@ The OCR logic is implemented using [Apple's Vision framework](https://developer.
     Clone this repo and then inside the pdf2txt folder, run `swift run`. The server should be up and running :)
 
 ## Credits:
-    [Converting PDF to Images in Swift: A Step-by-Step Guide](https://medium.com/@swift3.0devlopment/converting-pdf-to-images-in-swift-a-step-by-step-guide-3d7129a14165)
 
-    [File upload using Vapor 4](https://theswiftdev.com/file-upload-using-vapor-4/)
+[Converting PDF to Images in Swift: A Step-by-Step Guide](https://medium.com/@swift3.0devlopment/converting-pdf-to-images-in-swift-a-step-by-step-guide-3d7129a14165)
+
+[File upload using Vapor 4](https://theswiftdev.com/file-upload-using-vapor-4/)
 
 
 ### TODO:
