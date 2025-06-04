@@ -15,6 +15,7 @@ func removeFileExtension(_ path: String) -> String? {
     return String(path.dropLast(".pdf".count))
 }
 
+
 func getFileContents(path: String, destinationFolderPath: String) -> String {
     print("PATHHHHHHH: \(path)")
     var fileContents = "!"
@@ -43,9 +44,19 @@ func getFileContents(path: String, destinationFolderPath: String) -> String {
     //fromPngToString(fileName: "/Users/juanignaciobianchi/Downloads/UAT/test1-Page1.png")
     if let pathWithoutExtension = removeFileExtension(path) {
         let pdfPagePngized = pathWithoutExtension + "-Page1.png"
-        
+
         print("pdfPagePngized QUEDO: \(pdfPagePngized)")
         fromPngToString(fileName: pdfPagePngized)
+
+        // Read result written by processResults (which is called indirectly by fromPngToString)
+        let url = URL(fileURLWithPath: "/Users/juanignaciobianchi/devdev/pdf2txt/Public/RESULT.txt")
+        do { 
+            fileContents  = try String(contentsOf:url)  
+            print(fileContents) 
+        } 
+        catch { 
+            print("Error thrown while reading file. \(error.localizedDescription)") 
+        }
         print("!!!!")
     }
 
@@ -59,6 +70,14 @@ func processResults(_ recognizedStrings: [String]) {
         stringResult += str
     }
     print(">>>>>>>> \(stringResult)")
+
+    // Write result:
+    let url = URL(fileURLWithPath: "/Users/juanignaciobianchi/devdev/pdf2txt/Public/RESULT.txt")
+    do { 
+        try stringResult.write(to: url, atomically: true, encoding: .utf8) 
+    } catch { 
+        print("Error writing: \(error.localizedDescription)") 
+    }
 }
 
 func recognizeTextHandler(request: VNRequest, error: Error?) {
