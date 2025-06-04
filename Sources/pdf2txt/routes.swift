@@ -57,7 +57,7 @@ func routes(_ app: Application) throws {
                             try handle.close()
                         }
                         .flatMap {
-                            req.view.render("file_upload_result", UploadContext(fileName: fileName, isValid: isFileValid, fileContents: getFileContents(path: path)))
+                            req.view.render("file_upload_result", UploadContext(fileName: fileName, isValid: isFileValid, fileContents: getFileContents(path: path, destinationFolderPath: app.directory.publicDirectory)))
                         }
                 }
 

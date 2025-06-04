@@ -4,7 +4,18 @@ import AppKit
 import PDFKit
 import UniformTypeIdentifiers
 
-func getFileContents(path: String) -> String {
+
+// Given:   /Public/2025-0-3-16-06-72-test1.pdf
+// Returns: /Public/2025-0-3-16-06-72-test1
+func removeFileExtension(_ path: String) -> String? {
+    if path.isEmpty || !path.hasSuffix(".pdf") {
+        return nil
+    }
+
+    return String(path.dropLast(".pdf".count))
+}
+
+func getFileContents(path: String, destinationFolderPath: String) -> String {
     print("PATHHHHHHH: \(path)")
     var fileContents = "!"
     /*
@@ -28,9 +39,15 @@ func getFileContents(path: String) -> String {
 
     print("LLAMANDO A fromPngToString")
     //generateOnePngForEachPDFPage(pdfFileName: "/Users/juanignaciobianchi/Downloads/test1.pdf")
-    generateOnePngForEachPDFPage(pdfFileName: path)
-    fromPngToString(fileName: "/Users/juanignaciobianchi/Downloads/UAT/test1-Page1.png")
-    print("!!!!")
+    generateOnePngForEachPDFPage(pdfFileName: path, destinationFolderPath: destinationFolderPath)
+    //fromPngToString(fileName: "/Users/juanignaciobianchi/Downloads/UAT/test1-Page1.png")
+    if let pathWithoutExtension = removeFileExtension(path) {
+        let pdfPagePngized = pathWithoutExtension + "-Page1.png"
+        
+        print("pdfPagePngized QUEDO: \(pdfPagePngized)")
+        fromPngToString(fileName: pdfPagePngized)
+        print("!!!!")
+    }
 
     return fileContents
 }
@@ -123,9 +140,10 @@ func convertPDF(at sourceURL: URL, to destinationURL: URL, dpi: CGFloat = 200) t
     return urls
 }
 
-func generateOnePngForEachPDFPage(pdfFileName: String) {
+func generateOnePngForEachPDFPage(pdfFileName: String, destinationFolderPath: String) {
     let sourceURL = URL(fileURLWithPath: pdfFileName)
-    let destinationURL = URL(fileURLWithPath: "/Users/juanignaciobianchi/Downloads/TEST1AVER")
+    //let destinationURL = URL(fileURLWithPath: "/Users/juanignaciobianchi/Downloads/TEST1AVER")
+    let destinationURL = URL(fileURLWithPath: destinationFolderPath)
     do {
         let urls = try convertPDF(at: sourceURL, to: destinationURL, dpi: 200)
     } catch {
