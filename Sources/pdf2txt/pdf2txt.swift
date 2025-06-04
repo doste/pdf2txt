@@ -19,8 +19,8 @@ The function `getFileContents` will:
 */
 
 
-// Given:   /Public/2025-0-3-16-06-72-test1.pdf
-// Returns: /Public/2025-0-3-16-06-72-test1
+// Given:   .../Public/test1.pdf
+// Returns: .../Public/test1
 func removeFileExtension(_ path: String) -> String? {
     if path.isEmpty || !path.hasSuffix(".pdf") {
         return nil
@@ -28,9 +28,8 @@ func removeFileExtension(_ path: String) -> String? {
     return String(path.dropLast(".pdf".count))
 }
 
-
-func getFileContents(inputPath: String, destinationFolderPath: String) -> String {
-    var fileContents: String = ""
+func getFileContents(inputPath: String, destinationFolderPath: String) -> [String] {
+    var fileContents = [String]()
     //generateOnePngForEachPDFPage(pdfFileName: "/Users/juanignaciobianchi/Downloads/test1.pdf")
 
     // Generate a png file for each page corresponding to the input PDF, and store them in the folder given by destinationFolderPath.
@@ -45,22 +44,22 @@ func getFileContents(inputPath: String, destinationFolderPath: String) -> String
         // let pdfPagePngized = pathWithoutExtension + "-Page1.png"
         for pageNumber in 1...numberOfPages {
             let pdfPagePngized = pathWithoutExtension + "-Page\(pageNumber).png"
-            print("pdfPagePngized QUEDO: \(pdfPagePngized)")
+            //print("pdfPagePngized QUEDO: \(pdfPagePngized)")
             fromPngToString(fileName: pdfPagePngized)
-        }
-
-        // Read result written by processResults (which is called indirectly by fromPngToString)
-        let dirConfig = DirectoryConfiguration.detect()
-        let pathToResultString = dirConfig.publicDirectory + "/STRING_RESULT.txt"
-        let url = URL(fileURLWithPath: pathToResultString)
-        do { 
-            fileContents  = try String(contentsOf:url)
-        } 
-        catch { 
-            print("Error thrown while reading file. \(error.localizedDescription)") 
+        
+            // Read result written by processResults (which is called indirectly by fromPngToString)
+            let dirConfig = DirectoryConfiguration.detect()
+            let pathToResultString = dirConfig.publicDirectory + "/STRING_RESULT.txt"
+            let url = URL(fileURLWithPath: pathToResultString)
+            do { 
+                fileContents.append(try String(contentsOf:url))
+            } 
+            catch { 
+                print("Error thrown while reading file. \(error.localizedDescription)") 
+            }
         }
     } else {
-        fileContents = "Could not read PDF file :("
+        fileContents.append("Could not read PDF file :(")
     }
 
     return fileContents
@@ -87,19 +86,12 @@ func processResults(_ recognizedStrings: [String]) {
     }
     stringResult += "\n\n" // To delimiter a new page
 
-    print(">>>>>>>> \(stringResult)")
-
     // Write result:
     let dirConfig = DirectoryConfiguration.detect()
     let pathToResultString = dirConfig.publicDirectory + "/STRING_RESULT.txt"
     let url = URL(fileURLWithPath: pathToResultString)
-    //do { 
-        //try stringResult.write(to: url, atomically: true, encoding: .utf8) 
 
-        appendStringToFile(stringResult, url)
-    /*} catch { 
-        print("Error writing: \(error.localizedDescription)") 
-    }*/
+    appendStringToFile(stringResult, url)
 }
 
 func recognizeTextHandler(request: VNRequest, error: Error?) {

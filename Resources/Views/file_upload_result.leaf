@@ -18,7 +18,9 @@
         <h3>PDF File #(fileName) uploaded successfully. </h3>
         <h3> Its contents are: </h3>
         <hr />
-        <p> #(fileContents) </p>
+        #for(page in fileContents):
+            <p>#(page)</p>
+        #endfor
         <hr />
     #else:
         <h3 style='color:red;'>Invalid file. Only txt supported.</h3>

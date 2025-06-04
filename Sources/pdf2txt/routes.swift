@@ -24,7 +24,7 @@ func routes(_ app: Application) throws {
         struct UploadContext: Encodable {
             var fileName: String
             var isValid: Bool
-            var fileContents: String
+            var fileContents: [String]   // Each string of this array will corresponds to each page of the PDF
         }
 
         let input = try req.content.decode(Input.self)
@@ -57,13 +57,13 @@ func routes(_ app: Application) throws {
                             try handle.close()
                         }
                         .flatMap {
+                            //req.view.render("file_upload_result", UploadContext(fileName: fileName, isValid: isFileValid, fileContents: getFileContents(inputPath: path, destinationFolderPath: app.directory.publicDirectory)))
                             req.view.render("file_upload_result", UploadContext(fileName: fileName, isValid: isFileValid, fileContents: getFileContents(inputPath: path, destinationFolderPath: app.directory.publicDirectory)))
                         }
                 }
 
         } else {
-            print("ELSEEEEEEEEEEEEEEEEeeeEEEEEeeeeeeeeEEE")
-            return req.view.render("file_upload_result", UploadContext(fileName: fileName, isValid: isFileValid, fileContents: ""))
+            return req.view.render("file_upload_result", UploadContext(fileName: fileName, isValid: isFileValid, fileContents: [""]))
         }
         
     }
