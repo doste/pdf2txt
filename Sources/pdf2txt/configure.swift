@@ -8,9 +8,9 @@ public func configure(_ app: Application) async throws {
 
     /// config max upload file size
     app.routes.defaultMaxBodySize = "10mb"
-    
+
     // register routes
     try routes(app)
 
-     app.views.use(.leaf)
+    app.views.use(.leaf)
 }

@@ -11,32 +11,13 @@ func removeFileExtension(_ path: String) -> String? {
     if path.isEmpty || !path.hasSuffix(".pdf") {
         return nil
     }
-
     return String(path.dropLast(".pdf".count))
 }
 
 
 func getFileContents(path: String, destinationFolderPath: String) -> String {
     print("PATHHHHHHH: \(path)")
-    var fileContents = "!"
-    /*
-    var dataF: Data? = nil
-    let fileURL = URL(filePath: path)
-    do {
-        let fileHandle = try FileHandle(forReadingFrom: fileURL)
-
-        if let data = try fileHandle.readToEnd() {
-            dataF = data
-        }
-        fileHandle.closeFile()
-    } catch {
-        print(">>!>> \(error)")
-    }
-    if let dataF = dataF {
-        fileContents = String(decoding: dataF, as: UTF8.self)
-    }
-    */
-    print("FFFFFF: \(fileContents)")
+    var fileContents: String = ""
 
     print("LLAMANDO A fromPngToString")
     //generateOnePngForEachPDFPage(pdfFileName: "/Users/juanignaciobianchi/Downloads/test1.pdf")
@@ -49,15 +30,18 @@ func getFileContents(path: String, destinationFolderPath: String) -> String {
         fromPngToString(fileName: pdfPagePngized)
 
         // Read result written by processResults (which is called indirectly by fromPngToString)
-        let url = URL(fileURLWithPath: "/Users/juanignaciobianchi/devdev/pdf2txt/Public/RESULT.txt")
+        let dirConfig = DirectoryConfiguration.detect()
+        print("DIRRRRRRRRRR is \(dirConfig.workingDirectory)")      // /Users/juanignaciobianchi/devdev/pdf2txt/
+        let pathToResultString = dirConfig.publicDirectory + "/STRING_RESULT.txt"
+        let url = URL(fileURLWithPath: pathToResultString)
         do { 
-            fileContents  = try String(contentsOf:url)  
-            print(fileContents) 
+            fileContents  = try String(contentsOf:url)
         } 
         catch { 
             print("Error thrown while reading file. \(error.localizedDescription)") 
         }
-        print("!!!!")
+    } else {
+        fileContents = "Could not read PDF file :("
     }
 
     return fileContents
@@ -72,7 +56,9 @@ func processResults(_ recognizedStrings: [String]) {
     print(">>>>>>>> \(stringResult)")
 
     // Write result:
-    let url = URL(fileURLWithPath: "/Users/juanignaciobianchi/devdev/pdf2txt/Public/RESULT.txt")
+    let dirConfig = DirectoryConfiguration.detect()
+    let pathToResultString = dirConfig.publicDirectory + "/STRING_RESULT.txt"
+    let url = URL(fileURLWithPath: pathToResultString)
     do { 
         try stringResult.write(to: url, atomically: true, encoding: .utf8) 
     } catch { 
@@ -93,6 +79,7 @@ func recognizeTextHandler(request: VNRequest, error: Error?) {
     // Process the recognized strings.
     processResults(recognizedStrings)
 }
+
 
 
 func fromPngToString(fileName: String) {
