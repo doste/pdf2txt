@@ -1,27 +1,18 @@
 # pdf2txt
 
-💧 A project built with the Vapor web framework.
+pdf2txt is a simple tool for extracting text from PDF files. Implemented in Swift.
 
-## Getting Started
+The web backend and frontend are built with Vapor.
+The OCR logic is implemented using Apple's Vision framework [https://developer.apple.com/documentation/vision/].
 
-To build the project using the Swift Package Manager, run the following command in the terminal from the root of the project:
-```bash
-swift build
-```
+## Requirements:
+    - Swift https://www.swift.org/
+    - Vapor https://docs.vapor.codes/
 
-To run the project and start the server, use the following command:
-```bash
-swift run
-```
+## Usage:
+    git clone this repo and then inside the pdf2txt folder, run `swift run`. The server should be up and running :)
 
-To execute tests, use the following command:
-```bash
-swift test
-```
+## Credits:
+    - [Converting PDF to Images in Swift: A Step-by-Step Guide](https://medium.com/@swift3.0devlopment/converting-pdf-to-images-in-swift-a-step-by-step-guide-3d7129a14165)
 
-### See more
-
-- [Vapor Website](https://vapor.codes)
-- [Vapor Documentation](https://docs.vapor.codes)
-- [Vapor GitHub](https://github.com/vapor)
-- [Vapor Community](https://github.com/vapor-community)
+    - [File upload using Vapor 4](https://theswiftdev.com/file-upload-using-vapor-4/)

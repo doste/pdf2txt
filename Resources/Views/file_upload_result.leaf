@@ -28,6 +28,7 @@
 
 
     <a href="/upload">Upload new one</a>
+    <a href="/download">Download text file</a>
   </body>
 
 
@@ -49,6 +50,10 @@
 
     a:hover {
       text-decoration: underline;
+    }
+
+    a+a {
+      margin-left: 10px;
     }
 
     select {

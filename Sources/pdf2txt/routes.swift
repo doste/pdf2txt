@@ -2,7 +2,8 @@ import Vapor
 
 func routes(_ app: Application) throws {
     app.get { req async in
-        "It works!"
+        //"It works!"
+        req.redirect(to: "upload", redirectType: .permanent)
     }
 
     app.get("hello") { req async -> String in
@@ -15,6 +16,20 @@ func routes(_ app: Application) throws {
 
     app.get("upload") { req async throws -> View in
         return try await req.view.render("file_upload")
+    }
+
+    app.get("download") { req -> EventLoopFuture<Response> in
+
+        let dirConfig = DirectoryConfiguration.detect()
+        let filePath = dirConfig.publicDirectory + "/PDF_2_TEXT_RESULT.txt"
+
+        return req.fileio.collectFile(at: filePath).map { biteBuffer in
+            let body = Response.Body(buffer: biteBuffer)
+            
+            let response = Response(status: .ok, headers: HTTPHeaders(), body: body)
+            
+            return response
+        }
     }
 
     app.post("upload") { req -> EventLoopFuture<View> in
@@ -33,15 +48,13 @@ func routes(_ app: Application) throws {
             throw Abort(.badRequest)
         }
 
+        // Add a date prefix to the uploaded file so we will be able to upload multiple files even with the same name.
         let formatter = DateFormatter()
         formatter.dateFormat = "y-m-d-HH-MM-SS-"
         let prefix = formatter.string(from: .init())
         let fileName = prefix + input.file.filename
         let path = app.directory.publicDirectory + fileName
-        //let isFileValid = ["txt"].contains(input.file.extension?.lowercased())
-        //let isPdf = ["pdf"].contains(input.file.extension?.lowercased())
-        //let isFileValid = input.file.extension?.lowercased() == "txt"
-        let isFileValid = ["txt", "pdf"].contains(input.file.extension?.lowercased())
+        let isFileValid = input.file.extension?.lowercased() == "pdf"
 
         if isFileValid {
             return req.application.fileio.openFile(path: path,
@@ -57,7 +70,6 @@ func routes(_ app: Application) throws {
                             try handle.close()
                         }
                         .flatMap {
-                            //req.view.render("file_upload_result", UploadContext(fileName: fileName, isValid: isFileValid, fileContents: getFileContents(inputPath: path, destinationFolderPath: app.directory.publicDirectory)))
                             req.view.render("file_upload_result", UploadContext(fileName: fileName, isValid: isFileValid, fileContents: getFileContents(inputPath: path, destinationFolderPath: app.directory.publicDirectory)))
                         }
                 }

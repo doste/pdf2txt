@@ -15,7 +15,9 @@ The conversion from PDF to TXT goes through a intermediate step: converting the 
 
 The function `getFileContents` will:
 1) Generate a png file for each page corresponding to the input PDF, and store them in the folder given by destinationFolderPath.
-2) 
+2) Then, for each "pngized" page, it will call `fromPngToString` to convert that page to text.
+    It will go storing the text result in the file PDF_2_TEXT_RESULT.txt, page by page. 
+    Appending each page text to the `fileContents` array. This array of strings is what the template engine will receive to print out as html.
 */
 
 
@@ -30,26 +32,24 @@ func removeFileExtension(_ path: String) -> String? {
 
 func getFileContents(inputPath: String, destinationFolderPath: String) -> [String] {
     var fileContents = [String]()
-    //generateOnePngForEachPDFPage(pdfFileName: "/Users/juanignaciobianchi/Downloads/test1.pdf")
 
     // Generate a png file for each page corresponding to the input PDF, and store them in the folder given by destinationFolderPath.
     let numberOfPages = generateOnePngForEachPDFPage(pdfFileName: inputPath, destinationFolderPath: destinationFolderPath)
-    //fromPngToString(fileName: "/Users/juanignaciobianchi/Downloads/UAT/test1-Page1.png")
+    
     if let pathWithoutExtension = removeFileExtension(inputPath) {
         // For example if inputPath = "/Users/.../pdf2txt/Public/2025-54-4-15-06-77-test1.pdf"
         // We want to access the resulting png files, which will be given by the paths:
         // /Users/.../pdf2txt/Public/2025-54-4-15-06-77-test1-Page{i}.png FOR i = 0 .. < NUMBER_OF_PAGES
         // For example the first page: /Users/.../pdf2txt/Public/2025-54-4-15-06-77-test1-Page1.png
 
-        // let pdfPagePngized = pathWithoutExtension + "-Page1.png"
         for pageNumber in 1...numberOfPages {
             let pdfPagePngized = pathWithoutExtension + "-Page\(pageNumber).png"
-            //print("pdfPagePngized QUEDO: \(pdfPagePngized)")
-            fromPngToString(fileName: pdfPagePngized)
+            
+            fromPngToString(fileName: pdfPagePngized) // The result will be put in the PDF_2_TEXT_RESULT.txt file
         
             // Read result written by processResults (which is called indirectly by fromPngToString)
             let dirConfig = DirectoryConfiguration.detect()
-            let pathToResultString = dirConfig.publicDirectory + "/STRING_RESULT.txt"
+            let pathToResultString = dirConfig.publicDirectory + "/PDF_2_TEXT_RESULT.txt"
             let url = URL(fileURLWithPath: pathToResultString)
             do { 
                 fileContents.append(try String(contentsOf:url))
@@ -81,17 +81,16 @@ func appendStringToFile(_ s: String, _ fileURL: URL) {
 func processResults(_ recognizedStrings: [String]) {
     var stringResult = ""
     for str in recognizedStrings {
-        //print(str)
         stringResult += str
     }
     stringResult += "\n\n" // To delimiter a new page
 
     // Write result:
     let dirConfig = DirectoryConfiguration.detect()
-    let pathToResultString = dirConfig.publicDirectory + "/STRING_RESULT.txt"
+    let pathToResultString = dirConfig.publicDirectory + "/PDF_2_TEXT_RESULT.txt"
     let url = URL(fileURLWithPath: pathToResultString)
 
-    appendStringToFile(stringResult, url)
+    appendStringToFile(stringResult, url)   // So we don't overwrite the existing contents of the file.
 }
 
 func recognizeTextHandler(request: VNRequest, error: Error?) {
@@ -179,7 +178,6 @@ func generateOnePngForEachPDFPage(pdfFileName: String, destinationFolderPath: St
         let urls = try convertPDF(at: sourceURL, to: destinationURL, dpi: 200)
         return urls.count
     } catch {
-        //handle error
         print(error)
         return 0
     }
