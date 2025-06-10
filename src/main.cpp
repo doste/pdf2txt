@@ -1,5 +1,3 @@
-//#include <Interop/Interop-swift.h>
-//#include <pdf2txt/include/pdf2txt.hpp>
 #include "include/pdf2txt.hpp"
 #include <iostream>
 #include <string>
