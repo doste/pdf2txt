@@ -39,3 +39,5 @@ All the implementation is done in C++ and the converting from PDF to PNGs is don
 [Poppler](https://poppler.freedesktop.org/)
 
 [How to convert PDF to PNG efficiently?](https://stackoverflow.com/questions/45775394/how-to-convert-pdf-to-png-efficiently)
+
+[Mixing Swift and C++](https://www.swift.org/documentation/cxx-interop/)
