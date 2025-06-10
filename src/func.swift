@@ -1,9 +1,6 @@
 import AppKit
 import PDFKit
 
-public func sayHello() {
-    print("Hello from Swift")
-}
 
 func convertPDF(at sourceURL: URL, to destinationURL: URL, dpi: CGFloat = 200) throws -> [URL] {
     guard let pdfDocument = CGPDFDocument(sourceURL as CFURL) else { print("FAK"); return [] }
@@ -43,20 +40,13 @@ func convertPDF(at sourceURL: URL, to destinationURL: URL, dpi: CGFloat = 200) t
 
 
 public func generatePngFolder(pathToInputPdf: String, pathToOutputPngsFolder: String) {
-    //if CommandLine.arguments.count == 3 {
-        //let pathToInputPdf = String(CommandLine.arguments[1])
-        //let pathToOutputPngsFolder = String(CommandLine.arguments[2])
-        do {
-            /*
-            let urls = try convertPDF(at: URL(fileURLWithPath: "/Users/juanignaciobianchi/Downloads/test2.pdf"),
-                                    to: URL(fileURLWithPath: "/Users/juanignaciobianchi/devdev/pdf2txtToma2/PostaCpp/pngs_generated_from_pdf"),
-                                    dpi: 200)*/
-            let urls = try convertPDF(at: URL(fileURLWithPath: pathToInputPdf),
-                                                    to: URL(fileURLWithPath: pathToOutputPngsFolder),
-                                                    dpi: 200)
-            //print(urls.count)
-        } catch {
-            print(error)
-        }
+
+    do {
+        _ = try convertPDF(at: URL(fileURLWithPath: pathToInputPdf),
+                                                to: URL(fileURLWithPath: pathToOutputPngsFolder),
+                                                dpi: 200)
+    } catch {
+        print(error)
+    }
     
 }

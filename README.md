@@ -32,3 +32,10 @@ The output extracted text will be put in a folder called "OutputText", in a text
 
 All the implementation is done in C++ and the converting from PDF to PNGs is done in Swift.
 
+## Credits:
+
+[Tesseract](https://tesseract-ocr.github.io/)
+
+[Poppler](https://poppler.freedesktop.org/)
+
+[How to convert PDF to PNG efficiently?](https://stackoverflow.com/questions/45775394/how-to-convert-pdf-to-png-efficiently)
