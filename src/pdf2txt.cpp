@@ -17,6 +17,7 @@
 #include <fstream>
 #include <filesystem>
 
+/// HELPER FUNCTIONS
 
 void cleanFolder(std::string pathToFolderToClean) {
     const std::filesystem::path dir_path{pathToFolderToClean};
@@ -47,7 +48,6 @@ void createDirectoryNamed(std::string nameOfDirectory) {
 // Fallback, if applyPoppler didn't work.
 void applyOcr(PdfFile* inputPdf, std::string pathToOutputFolder, bool showingOutput) {
     std::string outText;
-    //std::string imPath = argv[1];
     std::string imPath;
  
     // Create Tesseract object
@@ -103,7 +103,6 @@ std::string to_utf8(poppler::ustring x) {
     }
 }
 
-
 // Fast path.
 // Independently if the text could be extracted or not, Poppler gives us the number of pages in the PDF file.
 // So we modify the PdfFile object we receive as argument: we set its numberOfPages field accordingly.
@@ -156,8 +155,6 @@ void pdf2txt(std::string inputPdfPath, bool showingOutput) {
     std::cout << "------- Extracting text from PDF file '" << fileName << "' -------" << std::endl;
     bool textCouldBeExtracted = applyPoppler(inputPdf, pathToFolderContainingOutputText, showingOutput);
     
-    //std::cout << "inputPdf.numberOfPages: "  << inputPdf->numberOfPages << std::endl;
-
     if (textCouldBeExtracted) {
         std::cout << "Text could be extracted the fast way!" << std::endl;
     } else {
@@ -165,5 +162,4 @@ void pdf2txt(std::string inputPdfPath, bool showingOutput) {
         applyOcr(inputPdf, pathToFolderContainingOutputText, showingOutput);
     }
     std::cout << std::endl;
-
 }
